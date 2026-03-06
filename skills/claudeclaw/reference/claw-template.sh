@@ -5,6 +5,10 @@ set -euo pipefail
 
 TARGET_DIR="{{target_dir}}"
 
+is_git_repo() {
+    git -C "$TARGET_DIR" rev-parse --is-inside-work-tree &>/dev/null
+}
+
 # ---------------------------------------------------------------------------
 # Permission building blocks
 # ---------------------------------------------------------------------------
@@ -53,6 +57,7 @@ Presets:
 
 Options:
   --model <model>      Override model (default: opus)
+  --worktree           Force worktree mode (requires git)
   --no-worktree        Run in-place (no worktree branch)
   --dry-run            Show the command without executing
   --prompt-prefix <p>  Prepend text to the generated prompt
@@ -78,10 +83,18 @@ cmd_presets() {
 }
 
 cmd_worktrees() {
+    if ! is_git_repo; then
+        echo "Error: $TARGET_DIR is not a git repository. Worktrees not available." >&2
+        exit 1
+    fi
     cd "$TARGET_DIR" && git worktree list
 }
 
 cmd_clean() {
+    if ! is_git_repo; then
+        echo "Error: $TARGET_DIR is not a git repository. Worktrees not available." >&2
+        exit 1
+    fi
     cd "$TARGET_DIR" || exit 1
 
     git worktree list --porcelain | grep "^worktree " | awk '{print $2}' | \
@@ -120,7 +133,7 @@ cmd_run() {
     }
 
     local model="opus"
-    local use_worktree=true
+    local use_worktree="auto"
     local dry_run=false
     local prompt=""
     local prompt_prefix=""
@@ -132,10 +145,16 @@ cmd_run() {
                 if [[ -z "${2:-}" ]]; then
                     echo "Error: -f requires a file path" >&2; exit 1
                 fi
-                local spec_file="$2"; shift 2
+                local spec_file
+                if [[ ! -f "$2" ]]; then
+                    echo "Error: spec file not found: $2" >&2; exit 1
+                fi
+                spec_file="$(cd "$(dirname "$2")" && pwd)/$(basename "$2")"
+                shift 2
                 prompt="Read $spec_file and execute the task described. Follow TDD: write failing tests first, then implement. Run the full test suite with '{{test_suite_command}}'. Show what you did."
                 ;;
             --model)        model="$2"; shift 2 ;;
+            --worktree)     use_worktree=true; shift ;;
             --no-worktree)  use_worktree=false; shift ;;
             --dry-run)      dry_run=true; shift ;;
             --prompt-prefix) prompt_prefix="$2"; shift 2 ;;
@@ -145,6 +164,15 @@ cmd_run() {
                 prompt="$1"; shift ;;
         esac
     done
+
+    # Resolve auto-detect worktree
+    if [[ "$use_worktree" == "auto" ]]; then
+        if is_git_repo; then
+            use_worktree=true
+        else
+            use_worktree=false
+        fi
+    fi
 
     if [[ -z "$prompt" ]]; then
         echo "Error: no prompt or spec file provided" >&2

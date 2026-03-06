@@ -284,7 +284,7 @@ If yes, generate a settings.json with the same permissions (or a slightly more c
 
 Explain briefly:
 
-"Claude Code can delegate tasks to child Claude instances, each running in an isolated git worktree with scoped permissions. This lets you run parallel tasks safely — e.g., one Claude fixes a bug while another researches architecture."
+"Claude Code can delegate tasks to child Claude instances with scoped permissions. If the target directory is a git repo, each child runs in an isolated worktree (separate branch). If it's not a git repo, children run in-place. The script auto-detects this — no configuration needed. You can also keep the claw script in a separate 'hub' repo pointing at the target — spec file paths are resolved to absolute, so they work from any location."
 
 Ask: "Want to set up Claude delegation for this project? [yes]"
 
@@ -318,11 +318,18 @@ The test building block adapts to detected tech stack.
 **Question 4**: Explain the spec-driven workflow:
 "The proven pattern for delegation:
 1. Write a spec file (bug report or feature story) with: problem, expected behavior, acceptance criteria
-2. Commit spec to main (worktrees branch from HEAD)
+2. If specs live in the target repo: commit to main first (worktrees branch from HEAD)
+   If specs live in a hub repo or elsewhere: no commit needed — paths are resolved to absolute
 3. Run: `./claw run <preset> -f <spec-file>`
 4. Child Claude reads spec, follows TDD, runs tests
 
 Where should spec files go? [docs/bugs/ and docs/epics/]"
+
+**Question 5**: "Should I auto-delegate read-only tasks (analyze) without asking, or always check first? [auto for read-only, ask for changes]"
+
+This feeds into the auto-delegation policy written to AGENTS.md. The two options:
+- **auto for read-only**: `analyze` preset can be invoked without confirmation; all other presets require asking first.
+- **always ask**: Every delegation requires user confirmation, regardless of preset.
 
 **Generate** (at file generation step):
 a. `./claw` script from `reference/claw-template.sh` with placeholders filled:

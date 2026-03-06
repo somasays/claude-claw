@@ -133,11 +133,24 @@ Example delegation section:
 ```markdown
 ## Delegation
 
+### Auto-Delegation Policy
+- **analyze** (read-only): Invoke automatically when research or exploration would benefit from a separate context. No confirmation needed.
+- **fix / fix-commit / full** (modifying): Always ask before delegating. Describe the task and suggested preset, wait for approval.
+
 ### When to Delegate
-- Bug fixes with clear specs → `fix-commit` preset
-- Research/analysis tasks → `analyze` preset
-- Features requiring review → `fix` preset
-- Autonomous feature work → `full` preset
+Proactively delegate when:
+- A task can run in parallel with your current work
+- Research would benefit from a separate, focused context
+- A bug fix has a clear spec and can be handled independently
+- Multiple independent changes are needed simultaneously
+
+### Preset Selection
+| Task Type | Preset | Why |
+|-----------|--------|-----|
+| Code review / research | analyze | Read-only, safe, auto-delegate |
+| Bug fix (user reviews diff) | fix | No git, user controls commits |
+| Bug fix (auto-commit) | fix-commit | TDD + auto-commit |
+| Feature (full autonomy) | full | Everything except destructive ops |
 
 ### Spec File Requirements
 Every delegated task needs a spec file with:
@@ -146,13 +159,8 @@ Every delegated task needs a spec file with:
 - **Acceptance criteria**: Testable conditions
 - **Constraints**: Any limitations or rules
 
-### Decision Framework
-| Task Type | Preset | Why |
-|-----------|--------|-----|
-| Code review / research | analyze | Read-only, safe |
-| Bug fix (you review) | fix | No git, you control commits |
-| Bug fix (auto-commit) | fix-commit | TDD + auto-commit |
-| Feature (full autonomy) | full | Everything except destructive ops |
+### How to Delegate
+Run via Bash: `./claw run <preset> "<prompt>"` or `./claw run <preset> -f <spec-file>`
 ```
 
 ---

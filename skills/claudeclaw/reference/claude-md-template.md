@@ -175,4 +175,9 @@ Use bold "NEVER" statements:
 - **Ask when unsure** — wrong assumptions cost time
 
 ### Delegation
-Only include if delegation was set up. Document presets, workflow, and spec format.
+Only include if delegation was set up. Document presets, workflow, spec format, and auto-delegation policy.
+Include: "You may auto-invoke `analyze` for read-only tasks. For all other
+presets, describe the task and preset, then ask for confirmation before running."
+Also note: the claw script auto-detects git repos — worktrees are used when available,
+otherwise Claude runs in-place. Spec file paths (`-f`) are resolved to absolute paths,
+so specs can live in any directory (including a separate hub repo).

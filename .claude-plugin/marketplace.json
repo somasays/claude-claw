@@ -1,7 +1,7 @@
 {
   "name": "claude-claw",
   "owner": {
-    "name": "Soma"
+    "name": "somasays"
   },
   "metadata": {
     "description": "ClaudeClaw: persistent AI identity, domain knowledge, permissions, and delegation for Claude Code"

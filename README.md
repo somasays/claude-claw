@@ -66,7 +66,7 @@ Choose from four presets for `.claude/settings.local.json`:
 - **Custom** -- Walk through each permission category
 
 ### Claude Delegation
-Set up a `./claw` script that launches child Claude instances in isolated git worktrees with scoped permissions:
+Set up a `./claw` script that launches child Claude instances with scoped permissions:
 
 ```bash
 ./claw run analyze "How does the auth system work?"
@@ -75,6 +75,12 @@ Set up a `./claw` script that launches child Claude instances in isolated git wo
 ```
 
 Presets: `analyze` (read-only), `fix` (edit+test), `fix-commit` (edit+test+git), `full` (everything except destructive ops).
+
+**Git auto-detection**: If the target directory is a git repo, children run in isolated worktrees. If not, they run in-place. Use `--worktree` or `--no-worktree` to override.
+
+**Cross-repo support**: The claw script can live in a separate "hub" repo while targeting a different directory. Spec file paths (`-f`) are resolved to absolute, so specs can live anywhere.
+
+**Auto-delegation**: Agents can auto-invoke `analyze` (read-only) without confirmation. Modifying presets require asking first.
 
 ### Two Modes
 
