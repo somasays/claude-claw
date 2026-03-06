@@ -23,7 +23,11 @@ Instead of a single monolithic system prompt, ClaudeClaw creates focused, purpos
 ## Installation
 
 ```bash
-claude plugin add soma/claude-claw
+# Add the marketplace
+/plugin marketplace add somasays/claude-claw
+
+# Install the plugin
+/plugin install claudeclaw@claude-claw
 ```
 
 ## Usage

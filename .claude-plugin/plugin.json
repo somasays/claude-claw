@@ -1,8 +1,10 @@
 {
   "name": "claudeclaw",
   "description": "Interactive setup wizard that creates layered context files (SOUL.md, STYLE.md, USER.md, AGENTS.md, CLAUDE.md, etc.) for persistent AI identity, domain knowledge, permissions, delegation, and memory. Run /claudeclaw to start.",
+  "version": "1.0.0",
   "author": {
-    "name": "Soma",
-    "email": ""
-  }
+    "name": "Soma"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/somasays/claude-claw"
 }

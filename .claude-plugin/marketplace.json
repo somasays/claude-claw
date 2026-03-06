@@ -1,0 +1,16 @@
+{
+  "name": "claude-claw",
+  "owner": {
+    "name": "Soma"
+  },
+  "metadata": {
+    "description": "ClaudeClaw: persistent AI identity, domain knowledge, permissions, and delegation for Claude Code"
+  },
+  "plugins": [
+    {
+      "name": "claudeclaw",
+      "source": "./",
+      "description": "Interactive setup wizard that creates layered context files for persistent AI identity, domain knowledge, permissions, delegation, and memory. Run /claudeclaw to start."
+    }
+  ]
+}
