@@ -1,0 +1,8 @@
+{
+  "name": "claudeclaw",
+  "description": "Interactive setup wizard that creates layered context files (SOUL.md, STYLE.md, USER.md, AGENTS.md, CLAUDE.md, etc.) for persistent AI identity, domain knowledge, permissions, delegation, and memory. Run /claudeclaw to start.",
+  "author": {
+    "name": "Soma",
+    "email": ""
+  }
+}
